@@ -15,7 +15,7 @@ const int NAVE_W = 50;
 const int NAVE_H = 30;
 const int RAIO_TIRO = 3;
 const float ACEL_TIRO = 0.077;
-const float VEL_DEFAULT;
+const float VEL_DEFAULT = 3;
 
 
 typedef struct Tiro {
@@ -205,26 +205,31 @@ int main(int argc, char **argv){
 			if (previous_p1_dir != p1.dir) {
 				previous_p1_dir = p1.dir;
 				flip_naves = rand()%2;
-				change_nave_type = rand()%4 == 0;
+
+				if (p1.vel > VEL_DEFAULT){
+					change_nave_type = rand()%2;
+				} else {
+					change_nave_type = rand()%4 == 0;
+				}
 
 				if (flip_naves) {
 					temp_h = p1.y;
 					p1.y = p2.y;
-					p2.y = temp_h;	
+					p2.y = temp_h;
 				}
 
 				if(change_nave_type) {
 					if (p1.vel == VEL_DEFAULT){
 						p1.vel = VEL_DEFAULT*1.5;
-						p1.cor = al_map_rgb(255, 255, 255);
-						p2.vel = VEL_DEFAULT*1.5;
 						p1.cor = al_map_rgb(0, 0, 0);
+						p2.vel = VEL_DEFAULT*1.5;
+						p2.cor = al_map_rgb(255, 255, 255);
 					}
 					else {
 						p1.vel = VEL_DEFAULT;
 						p1.cor = al_map_rgb(255, 0, 0);;
-						p2.vel = VEL_DEFAULT*1.5;
-						p1.cor = al_map_rgb(0, 0, 255);
+						p2.vel = VEL_DEFAULT;
+						p2.cor = al_map_rgb(0, 0, 255);
 					}
 				}
 
