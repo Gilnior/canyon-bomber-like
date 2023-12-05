@@ -1,3 +1,4 @@
+#include <allegro5/color.h>
 #include <allegro5/keycodes.h>
 #include <stdio.h>
 #include <allegro5/allegro.h>
@@ -7,6 +8,8 @@
 #include <allegro5/allegro_image.h>
 #include <stdlib.h>
 
+#define TARGET_COLS 20
+#define TARGET_ROWS 8
 
 const float FPS = 60;  
 const int SCREEN_W = 960;
@@ -36,6 +39,23 @@ typedef struct Nave {
 	
 } Nave;
 
+typedef struct Target {
+	float x1, x2, y1, y2;
+	ALLEGRO_COLOR cor;
+	int active;
+} Target;
+
+void desenha_targets(Target targets[TARGET_ROWS][TARGET_COLS]){
+	int i, j;
+
+	for(i=0; i<TARGET_ROWS; i++){
+		for(j=0; j<TARGET_COLS; j++) {
+			if(targets[i][j].active == 1) {
+			al_draw_filled_rectangle(targets[i][j].x1, targets[i][j].y1, targets[i][j].x2, targets[i][j].y2, targets[i][j].cor);
+			}
+		}
+	}
+}
 
 void desenha_cenario() {
 	ALLEGRO_COLOR cor = al_map_rgb(119, 113, 202);
@@ -157,7 +177,7 @@ int main(int argc, char **argv){
 	//Criar a Nave 1:
 	Nave p1;
 	p1.x = -1;
-	p1.y = NAVE_H;
+	p1.y = NAVE_H*2;
 	p1.cor = al_map_rgb(255, 0, 0);
 	p1.dir = 1;
 	p1.vel = VEL_DEFAULT;
@@ -170,7 +190,7 @@ int main(int argc, char **argv){
 	//Criar a Nave 2:
 	Nave p2;
 	p2.x = SCREEN_W;
-	p2.y = NAVE_H*3;
+	p2.y = NAVE_H*4;
 	p2.cor = al_map_rgb(0, 0, 255);
 	p2.dir = -1;
 	p2.vel = VEL_DEFAULT;
@@ -179,6 +199,27 @@ int main(int argc, char **argv){
 	p2.tiro.ativo = 0;
 	p2.tiro.hit = 0;
 	p2.tiro.vel_y = 0;
+
+	//cria grid
+	Target targets[TARGET_ROWS][TARGET_COLS];
+
+	int i, j;
+	float target_w = SCREEN_W/(TARGET_COLS*1.5);
+	float target_h = SCREEN_H/TARGET_ROWS;
+	ALLEGRO_COLOR cor;
+
+	for (i=0;i<TARGET_ROWS;i++) {
+		cor = al_map_rgb(rand()%256, rand()%256, rand()%256);
+		
+		for(j=0; j< TARGET_COLS; j++) {
+			targets[i][j].x1 = j*target_h;
+			targets[i][j].x2 = targets[i][j].x1 + target_h;
+			targets[i][j].y1 = SCREEN_H - i*target_w;
+			targets[i][j].y2 = targets[i][j].y1 - target_w;
+			targets[i][j].cor = cor;
+			targets[i][j].active = 1;
+		}
+	}
 
 	//inicia o temporizador
 	al_start_timer(timer);
@@ -196,6 +237,7 @@ int main(int argc, char **argv){
 		//se o tipo de evento for um evento do temporizador, ou seja, se o tempo passou de t para t+1
 		if(ev.type == ALLEGRO_EVENT_TIMER) {
 			desenha_cenario();
+			desenha_targets(targets);
 			atualiza_nave(&p1);
 			atualiza_nave(&p2);
 			desenha_nave(p1);
