@@ -37,6 +37,7 @@ typedef struct Nave {
 	float vel;
 	Tiro tiro;
 	int score;
+	int hp;
 } Nave;
 
 typedef struct Target {
@@ -78,6 +79,9 @@ void desenha_nave(Nave nave) {
 }
 
 void atualiza_nave(Nave *nave) {
+	int collision;
+	int missed;
+	
 	nave->x += (nave->dir)*nave->vel;
 	if(nave->x > SCREEN_W + NAVE_W ||
 	   nave->x < -NAVE_W) {
@@ -92,10 +96,17 @@ void atualiza_nave(Nave *nave) {
 		nave->tiro.y += nave->tiro.vel_y;
 	}
 	
-	if(nave->tiro.x < -RAIO_TIRO ||
+	collision = nave->tiro.x < -RAIO_TIRO ||
 	   nave->tiro.x > SCREEN_W + RAIO_TIRO ||
-	   nave->tiro.y > SCREEN_H + RAIO_TIRO) {
+	   nave->tiro.y > SCREEN_H + RAIO_TIRO;
+
+	if(collision && nave->tiro.ativo == 1) {
 		   nave->tiro.ativo = 0;
+			missed = nave->tiro.hit == 0;
+
+		   if(missed) {
+				nave->hp--;
+		   }
 	}
 }
 
@@ -158,8 +169,8 @@ int main(int argc, char **argv){
 	}
 
 	//carrega o arquivo arial.ttf da fonte Arial e define que sera usado o tamanho 32 (segundo parametro)
-    ALLEGRO_FONT *size_32 = al_load_font("arial.ttf", 24, 1);   
-	if(size_32 == NULL) {
+    ALLEGRO_FONT *size_24 = al_load_font("arial.ttf", 24, 1);   
+	if(size_24 == NULL) {
 		fprintf(stderr, "font file does not exist or cannot be accessed!\n");
 	}
 
@@ -191,6 +202,7 @@ int main(int argc, char **argv){
 	p1.tiro.hit = 0;
 	p1.tiro.vel_y = 0;
 	p1.score = 0;
+	p1.hp = 3;
 
 	//Criar a Nave 2:
 	Nave p2;
@@ -205,6 +217,7 @@ int main(int argc, char **argv){
 	p2.tiro.hit = 0;
 	p2.tiro.vel_y = 0;
 	p2.score = 0;
+	p2.hp = 3;
 
 	//cria grid
 	Target targets[TARGET_ROWS][TARGET_COLS];
@@ -251,8 +264,8 @@ int main(int argc, char **argv){
 			atualiza_nave(&p2);
 			desenha_nave(p1);
 			desenha_nave(p2);
-			al_draw_textf(size_32, p1.cor, 30, score_screen_y, 1, "%d", p1.score);
-			al_draw_textf(size_32, p2.cor, SCREEN_W - 60, score_screen_y, 1, "%d", p2.score);
+			al_draw_textf(size_24, p1.cor, 30, score_screen_y, 1, "%d  %d", p1.hp, p1.score);
+			al_draw_textf(size_24, p2.cor, SCREEN_W - 60, score_screen_y, 1, "%d  %d", p2.hp, p2.score);
 			al_flip_display();
 
 			if (previous_p1_dir != p1.dir) {
@@ -293,9 +306,11 @@ int main(int argc, char **argv){
 					if (check_collision(p1.tiro, targets[i][j])) {
 						targets[i][j].active = 0;
 						p1.score += targets[i][j].value;
+						p1.tiro.hit = 1;
 					} else if (check_collision(p2.tiro, targets[i][j])) {
 						targets[i][j].active = 0;
 						p2.score += targets[i][j].value;
+						p2.tiro.hit = 1;
 					}
 
 			}
