@@ -36,13 +36,12 @@ typedef struct Nave {
 	float vel;
 	Tiro tiro;
 	int score;
-	
 } Nave;
 
 typedef struct Target {
 	float x1, x2, y1, y2;
 	ALLEGRO_COLOR cor;
-	int active;
+	int active, value;
 } Target;
 
 void desenha_targets(Target targets[TARGET_ROWS][TARGET_COLS]){
@@ -97,6 +96,10 @@ void atualiza_nave(Nave *nave) {
 	   nave->tiro.y > SCREEN_H + RAIO_TIRO) {
 		   nave->tiro.ativo = 0;
 	}
+}
+
+int check_collision(Tiro tiro, Target target){
+	return tiro.x >= target.x1 && tiro.x <= target.x2 && tiro.y <= target.y1 && tiro.y >= target.y2;
 }
 
  
@@ -186,6 +189,7 @@ int main(int argc, char **argv){
 	p1.tiro.ativo = 0;
 	p1.tiro.hit = 0;
 	p1.tiro.vel_y = 0;
+	p1.score = 0;
 
 	//Criar a Nave 2:
 	Nave p2;
@@ -199,6 +203,7 @@ int main(int argc, char **argv){
 	p2.tiro.ativo = 0;
 	p2.tiro.hit = 0;
 	p2.tiro.vel_y = 0;
+	p2.score = 0;
 
 	//cria grid
 	Target targets[TARGET_ROWS][TARGET_COLS];
@@ -218,6 +223,7 @@ int main(int argc, char **argv){
 			targets[i][j].y2 = targets[i][j].y1 - target_w;
 			targets[i][j].cor = cor;
 			targets[i][j].active = 1;
+			targets[i][j].value = i+ 1;
 		}
 	}
 
@@ -276,6 +282,19 @@ int main(int argc, char **argv){
 				}
 
 			}
+
+			for (i=0;i<TARGET_ROWS;i++) {
+				for(j=0; j< TARGET_COLS; j++) {
+					if (check_collision(p1.tiro, targets[i][j])) {
+						targets[i][j].active = 0;
+						p1.score += targets[i][j].value;
+					} else if (check_collision(p2.tiro, targets[i][j])) {
+						targets[i][j].active = 0;
+						p2.score += targets[i][j].value;
+					}
+
+			}
+		}
 			
 			if(al_get_timer_count(timer)%(int)FPS == 0) {
 					printf("\n%d segundos se passaram...", (int)(al_get_timer_count(timer)/FPS));
