@@ -12,4 +12,4 @@ canyon_bomb_like.o: canyon_bomb_like.c
 	$(CC) $(FLAGS) -c canyon_bomb_like.c
 	
 clean:
-	del canyon_bomb_like.o
+	rm canyon_bomb_like.o
