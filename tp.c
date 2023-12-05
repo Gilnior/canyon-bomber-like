@@ -7,6 +7,7 @@
 #include <allegro5/allegro_primitives.h>
 #include <allegro5/allegro_image.h>
 #include <stdlib.h>
+#include <string.h>
 
 #define TARGET_COLS 20
 #define TARGET_ROWS 8
@@ -99,7 +100,7 @@ void atualiza_nave(Nave *nave) {
 }
 
 int check_collision(Tiro tiro, Target target){
-	return tiro.x >= target.x1 && tiro.x <= target.x2 && tiro.y <= target.y1 && tiro.y >= target.y2;
+	return tiro.ativo ==1  && target.active == 1 && tiro.x >= target.x1 && tiro.x <= target.x2 && tiro.y <= target.y1 && tiro.y >= target.y2;
 }
 
  
@@ -157,7 +158,7 @@ int main(int argc, char **argv){
 	}
 
 	//carrega o arquivo arial.ttf da fonte Arial e define que sera usado o tamanho 32 (segundo parametro)
-    ALLEGRO_FONT *size_32 = al_load_font("arial.ttf", 32, 1);   
+    ALLEGRO_FONT *size_32 = al_load_font("arial.ttf", 24, 1);   
 	if(size_32 == NULL) {
 		fprintf(stderr, "font file does not exist or cannot be accessed!\n");
 	}
@@ -235,6 +236,8 @@ int main(int argc, char **argv){
 	int previous_p1_dir = p1.dir;
 	int playing = 1;
 
+	float score_screen_y = 7;
+
 	while(playing) {
 		ALLEGRO_EVENT ev;
 		//espera por um evento e o armazena na variavel de evento ev
@@ -248,6 +251,8 @@ int main(int argc, char **argv){
 			atualiza_nave(&p2);
 			desenha_nave(p1);
 			desenha_nave(p2);
+			al_draw_textf(size_32, p1.cor, 30, score_screen_y, 1, "%d", p1.score);
+			al_draw_textf(size_32, p2.cor, SCREEN_W - 60, score_screen_y, 1, "%d", p2.score);
 			al_flip_display();
 
 			if (previous_p1_dir != p1.dir) {
@@ -338,3 +343,4 @@ int main(int argc, char **argv){
 
 	return 0;
 }
+
