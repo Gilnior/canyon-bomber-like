@@ -264,8 +264,8 @@ int main(int argc, char **argv){
 			atualiza_nave(&p2);
 			desenha_nave(p1);
 			desenha_nave(p2);
-			al_draw_textf(size_24, p1.cor, 30, score_screen_y, 1, "%d  %d", p1.hp, p1.score);
-			al_draw_textf(size_24, p2.cor, SCREEN_W - 60, score_screen_y, 1, "%d  %d", p2.hp, p2.score);
+			al_draw_textf(size_24, p1.cor, 40, score_screen_y, 1, "%d  %d", p1.hp, p1.score);
+			al_draw_textf(size_24, p2.cor, SCREEN_W - 40, score_screen_y, 1, "%d  %d", p2.hp, p2.score);
 			al_flip_display();
 
 			if (previous_p1_dir != p1.dir) {
