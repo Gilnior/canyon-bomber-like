@@ -31,6 +31,7 @@ typedef struct Tiro {
 
 
 typedef struct Nave {
+	unsigned int id;
 	float x,y;
 	ALLEGRO_COLOR cor;
 	int dir;
@@ -191,6 +192,7 @@ int main(int argc, char **argv){
 
 	//Criar a Nave 1:
 	Nave p1;
+	p1.id = 1;
 	p1.x = -1;
 	p1.y = NAVE_H*2;
 	p1.cor = al_map_rgb(255, 0, 0);
@@ -206,6 +208,7 @@ int main(int argc, char **argv){
 
 	//Criar a Nave 2:
 	Nave p2;
+	p2.id = 2;
 	p2.x = SCREEN_W;
 	p2.y = NAVE_H*4;
 	p2.cor = al_map_rgb(0, 0, 255);
@@ -219,7 +222,7 @@ int main(int argc, char **argv){
 	p2.score = 0;
 	p2.hp = 3;
 
-	//cria grid
+	//cria targets
 	Target targets[TARGET_ROWS][TARGET_COLS];
 
 	int i, j;
@@ -247,7 +250,9 @@ int main(int argc, char **argv){
 	unsigned int change_nave_type, flip_naves;
 	float temp_h;
 	int previous_p1_dir = p1.dir;
+	int no_target_active;
 	int playing = 1;
+	Nave *winner;
 
 	float score_screen_y = 7;
 
@@ -301,6 +306,8 @@ int main(int argc, char **argv){
 
 			}
 
+			no_target_active = 1;
+
 			for (i=0;i<TARGET_ROWS;i++) {
 				for(j=0; j< TARGET_COLS; j++) {
 					if (check_collision(p1.tiro, targets[i][j])) {
@@ -312,9 +319,20 @@ int main(int argc, char **argv){
 						p2.score += targets[i][j].value;
 						p2.tiro.hit = 1;
 					}
-
+					if (targets[i][j].active == 1) {
+						no_target_active = 0;
+					} 
+				}
 			}
-		}
+
+			if (no_target_active || p1.hp == 0 || p2.hp == 0) {
+				playing = 0;
+				if ((p1.hp == 0) || (p2.score > p1.score && p2.hp > 0)) {
+					winner = &p2;
+				} else if ((p2.hp == 0) || (p1.score > p2.score && p1.hp > 0)) {
+					winner = &p1;
+				}
+			}
 			
 			if(al_get_timer_count(timer)%(int)FPS == 0) {
 					printf("\n%d segundos se passaram...", (int)(al_get_timer_count(timer)/FPS));
@@ -349,7 +367,6 @@ int main(int argc, char **argv){
 
 			// printf("\ncodigo tecla: %d", ev.keyboard.keycode);
 		}
-
 	}
 
 	al_destroy_timer(timer);
