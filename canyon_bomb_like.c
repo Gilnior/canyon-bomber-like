@@ -1,4 +1,7 @@
+#include <allegro5/altime.h>
 #include <allegro5/color.h>
+#include <allegro5/display.h>
+#include <allegro5/drawing.h>
 #include <allegro5/keycodes.h>
 #include <stdio.h>
 #include <allegro5/allegro.h>
@@ -368,6 +371,11 @@ int main(int argc, char **argv){
 			// printf("\ncodigo tecla: %d", ev.keyboard.keycode);
 		}
 	}
+
+	al_clear_to_color(al_map_rgb(0, 0, 0));
+	al_draw_textf(size_24, winner->cor, SCREEN_W/2, SCREEN_H/2, 1, "P%d WINS!\nScore %d", winner->id, winner->score);
+	al_flip_display();
+	al_rest(4.7);
 
 	al_destroy_timer(timer);
 	al_destroy_display(display);
