@@ -10,7 +10,7 @@
 #include <allegro5/allegro_primitives.h>
 #include <allegro5/allegro_image.h>
 #include <stdlib.h>
-#include <string.h>
+#include <unistd.h>
 
 #define TARGET_COLS 20
 #define TARGET_ROWS 8
@@ -34,7 +34,7 @@ typedef struct Tiro {
 
 
 typedef struct Nave {
-	unsigned int id;
+	int id;
 	float x,y;
 	ALLEGRO_COLOR cor;
 	int dir;
@@ -372,10 +372,49 @@ int main(int argc, char **argv){
 		}
 	}
 
-	al_clear_to_color(al_map_rgb(0, 0, 0));
-	al_draw_textf(size_24, winner->cor, SCREEN_W/2, SCREEN_H/2, 1, "P%d WINS!\nScore %d", winner->id, winner->score);
+	al_clear_to_color(al_map_rgb(144, 144, 0));
+	al_draw_textf(size_24, winner->cor, SCREEN_W/2, SCREEN_H/2, 1, "P%d WINS! Score %d", winner->id, winner->score);
 	al_flip_display();
 	al_rest(4.7);
+
+
+	al_clear_to_color(al_map_rgb(144, 144, 15));
+	int p1_victories=0, p2_victories=0, last_victory_id=0, last_victory_score=0, last_victory_hp=0;
+
+	char records_filename[] = "records.txt";
+	char file_format[] = "%d,%d,%d,%d,%d";
+
+	FILE *records;
+
+	if (access(records_filename, F_OK) == 0) {
+		records = fopen(records_filename, "r");
+		fscanf(records, file_format, &p1_victories, &p2_victories, &last_victory_id, &last_victory_score, &last_victory_hp);
+		fclose(records);
+		records = fopen(records_filename, "w");
+	} else {
+		records = fopen(records_filename, "w");
+	}
+
+	if (last_victory_id != 0) {
+		al_draw_textf(size_24, winner->cor, SCREEN_W/2, SCREEN_H*0.3, 1, "Previous game winner:  P%d with %d of score and %d lifes", last_victory_id, last_victory_score, last_victory_hp);
+	};
+
+	if (winner->id == 1) {
+		p1_victories++;
+	} else {
+		p2_victories++;
+	}
+	
+	al_draw_textf(size_24, winner->cor, SCREEN_W/2, SCREEN_H*0.7, 1, "P1: %d victories P2: %d victories", p1_victories, p2_victories);
+	
+	last_victory_id = winner->id;
+	last_victory_score = winner->score;
+	last_victory_hp = winner->hp;
+
+	fprintf(records, file_format, p1_victories, p2_victories, last_victory_id, last_victory_score, last_victory_hp);
+	fclose(records);
+	al_flip_display();
+	al_rest(7.64);
 
 	al_destroy_timer(timer);
 	al_destroy_display(display);
