@@ -243,7 +243,7 @@ int main(int argc, char **argv){
 			targets[i][j].y2 = targets[i][j].y1 - target_w;
 			targets[i][j].cor = cor;
 			targets[i][j].active = 1;
-			targets[i][j].value = i+ 1;
+			targets[i][j].value = TARGET_ROWS-i;
 		}
 	}
 
