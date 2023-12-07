@@ -22,7 +22,7 @@ Para compilar o jogo:
 make
 ```
 
-Isso gerará o executável canyon_bomb_like, que pode ser executado clicando no jogo ou pelo comando:
+Isso gerará o executável canyon_bomb_like, que pode ser executado clicando nele ou pelo comando:
 ```
 ./canyon_bomb_like 
 ```
