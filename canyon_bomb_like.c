@@ -229,18 +229,18 @@ int main(int argc, char **argv){
 	Target targets[TARGET_ROWS][TARGET_COLS];
 
 	int i, j;
-	float target_w = SCREEN_W/(TARGET_COLS*1.5);
-	float target_h = SCREEN_H/TARGET_ROWS;
+	float target_w = SCREEN_W/TARGET_COLS;
+	float target_h = SCREEN_H/(TARGET_ROWS*2.34);
 	ALLEGRO_COLOR cor;
 
 	for (i=0;i<TARGET_ROWS;i++) {
 		cor = al_map_rgb(rand()%256, rand()%256, rand()%256);
 		
 		for(j=0; j< TARGET_COLS; j++) {
-			targets[i][j].x1 = j*target_h;
-			targets[i][j].x2 = targets[i][j].x1 + target_h;
-			targets[i][j].y1 = SCREEN_H - i*target_w;
-			targets[i][j].y2 = targets[i][j].y1 - target_w;
+			targets[i][j].x1 = j*target_w;
+			targets[i][j].x2 = targets[i][j].x1 + target_w;
+			targets[i][j].y1 = SCREEN_H - i*target_h;
+			targets[i][j].y2 = targets[i][j].y1 - target_h;
 			targets[i][j].cor = cor;
 			targets[i][j].active = 1;
 			targets[i][j].value = TARGET_ROWS-i;
