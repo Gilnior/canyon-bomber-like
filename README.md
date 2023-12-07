@@ -9,7 +9,7 @@ Projeto final da disciplina de Programação e Desenvolvimento de Software I. O 
 
 ### Instalando dependências
 Usando o gerenciador de pacotes [pacman](https://wiki.archlinux.org/title/Pacman) disponível para sistemas baseados em Arch:
-```
+```shell
 sudo pacman -S allegro
 ```
 
@@ -18,18 +18,18 @@ sudo pacman -S allegro
 Ir para a raiz do projeto e seguir os próximos passos.
 
 Para compilar o jogo:
-```
+```shell
 make
 ```
 
 Isso gerará o executável canyon_bomb_like, que pode ser executado clicando nele ou pelo comando:
-```
+```shell
 ./canyon_bomb_like 
 ```
 
 ### Opcional
 Remover arquivos intermediários gerados durante a compilação
-```
+```shell
 make clean
 ```
 
