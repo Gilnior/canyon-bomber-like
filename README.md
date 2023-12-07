@@ -1,7 +1,7 @@
 # canyon-bomber-like
 
 ## Sobre o projeto
-Projeto final da disciplina de Programação e Desenvolvimento de Software I. O objetivo é fazer um jogo inspitado em [Canyon Bomber](https://en.wikipedia.org/wiki/Canyon_Bomber), usando a biblioteca Allegro na linguagem C. Para facilitar o desenvolvimento, só foi pensando o suporte para Linux, especificamente, Manjaro (muito provávelmente qualquer distribuição baseada em Arch deve funcionar).
+Projeto final da disciplina de Programação e Desenvolvimento de Software I. O objetivo é fazer um jogo inspitado em [Canyon Bomber](https://en.wikipedia.org/wiki/Canyon_Bomber), usando a biblioteca Allegro na linguagem C. Para facilitar o desenvolvimento, só foi pensando o suporte para Linux, especificamente, Manjaro (muito provavelmente qualquer distribuição baseada em Arch deve funcionar).
 
 
 ## Dependências
