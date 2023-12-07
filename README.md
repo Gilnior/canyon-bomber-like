@@ -1,7 +1,7 @@
 # canyon-bomber-like
 
 ## Sobre o projeto
-Projeto final da disciplina de Programação e Desenvolvimento de Software I. O objetivo é fazer um jogo inspitado em [Canyon Bomber](https://en.wikipedia.org/wiki/Canyon_Bomber), usando a biblioteca Allegro na linguagem C. Para facilitar o desenvolvimento, só foi pensando o suporte para Linux, especificamente, Manjaro (muito provavelmente qualquer distribuição baseada em Arch deve funcionar).
+Projeto final da disciplina de Programação e Desenvolvimento de Software I. O objetivo é fazer um jogo inspirado em [Canyon Bomber](https://en.wikipedia.org/wiki/Canyon_Bomber), usando a biblioteca [Allegro](https://wiki.archlinux.org/title/Allegro) na linguagem C. Para facilitar o desenvolvimento, só foi pensando o suporte para Linux, especificamente, Manjaro (muito provavelmente qualquer distribuição baseada em Arch deve funcionar).
 
 
 ## Dependências
@@ -18,10 +18,10 @@ sudo pacman -S allegro
 Ir para a raiz do projeto e seguir os próximos passos.
 
 Para compilar o jogo:
-
 ```
 make
 ```
+
 Isso gerará o executável canyon_bomb_like, que pode ser executado clicando no jogo ou pelo comando:
 ```
 ./canyon_bomb_like 
@@ -58,4 +58,3 @@ Foram criadas três estruturas:
 - Tiro: essa é a estrutura responsável por armazenar todas as informações relevantes sobre o projétil solto pelas naves
 - Nave: esse é a estrutura responsável por armazenar todas as informações relevantes sobre as naves
 - Target: esse é a estrutura responsável por armazenar todas as informações relevantes sobre os blocos/alvos que são acertados pelo Tiro
-
